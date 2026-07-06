@@ -1,0 +1,34 @@
+1) create ecr repo
+
+2) docker steps
+
+aws ecr get-login-password --region us-east-1 --profile mcruz | docker login --username AWS --password-stdin 992690408789.dkr.ecr.us-east-1.amazonaws.com
+
+docker build --platform linux/amd64 -t ecr-ecs .
+
+docker tag ecr-ecs:latest 992690408789.dkr.ecr.us-east-1.amazonaws.com/ecr-ecs:latest
+
+docker push 992690408789.dkr.ecr.us-east-1.amazonaws.com/ecr-ecs:latest
+
+3) CFT resources
+
+aws cloudformation create-stack \
+--stack-name tbd-stack \
+--template-body file://ecs-template.yml \
+--capabilities CAPABILITY_IAM \
+--profile mcruz
+
+aws cloudformation update-stack \
+--stack-name ecr-ecs-stack \
+--template-body file://ecs-template.yml \
+--capabilities CAPABILITY_IAM \
+--profile mcruz
+
+4)
+
+aws ecs execute-command --cluster ecr-ecs-cluster --task 2a0916cfa33d4728a2eb341e0c7357a8 --container ecr-ecs-container --interactive --command '/bin/sh'
+
+5)
+
+
+

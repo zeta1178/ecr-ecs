@@ -1,0 +1,6 @@
+streamlit
+boto3
+langchain
+pillow
+st-dynamodb-connection
+streamlit_msal

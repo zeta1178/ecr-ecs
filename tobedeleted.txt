@@ -1,0 +1,4 @@
+aws secretsmanager delete-secret \
+    --secret-id "/ecs/ecr-ecs/bedrock-agent-id" \
+    --force-delete-without-recovery \
+    --profile "default"
