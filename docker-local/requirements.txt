@@ -6,3 +6,4 @@ st-dynamodb-connection
 streamlit_msal
 python-dotenv
 PyYAML
+anthropic[bedrock]
