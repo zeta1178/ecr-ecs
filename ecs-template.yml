@@ -38,8 +38,7 @@ Resources:
       Name:  '/ecs/ecr-ecs/bedrock-agent-tmp'
       KmsKeyId: !Ref KmsKeySecrets
       Description: 'Secret for Bedrock Agent ID used by the ECS Fargate container.'
-      GenerateSecretString:
-        SecretStringTemplate: '{"BEDROCK_AGENT_ID": "124", "BEDROCK_AGENT_ALIAS_ID": "TSTALIASID", "AWS_DEFAULT_REGION": "us-east-1"}'
+      SecretString: '{"BEDROCK_AGENT_ID": "124", "BEDROCK_AGENT_ALIAS_ID": "TSTALIASID", "AWS_DEFAULT_REGION": "us-east-1"}'
   
   # IAM Execution Role for Fargate Agent to pull from ECR and log to CloudWatch
   EcsTaskExecutionRole:
