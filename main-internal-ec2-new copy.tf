@@ -581,32 +581,26 @@ resource "aws_iam_instance_profile" "asg_instance" {
 }
 
 # ---------------------------------------------------------------------------
-# Launch template + AutoScaling group
+# Launch configuration + AutoScaling group
 # ---------------------------------------------------------------------------
 
-resource "aws_launch_template" "ecs" {
-  name_prefix   = "is-aiworkspace-jupyterhub-d-"
-  image_id      = data.aws_ssm_parameter.ecs_optimized_ami.value
-  instance_type = "m6a.8xlarge"
-
-  iam_instance_profile {
-    name = aws_iam_instance_profile.asg_instance.name
-  }
-
-  vpc_security_group_ids = [aws_security_group.asg_ec2.id]
+resource "aws_launch_configuration" "ecs" {
+  image_id             = data.aws_ssm_parameter.ecs_optimized_ami.value
+  instance_type        = "m6a.8xlarge"
+  iam_instance_profile = aws_iam_instance_profile.asg_instance.name
+  security_groups      = [aws_security_group.asg_ec2.id]
 
   metadata_options {
     http_tokens = "required"
   }
 
-  user_data = base64encode(<<-EOT
+  user_data = <<-EOT
     #!/bin/bash
     echo ECS_CLUSTER=${local.cluster_name} >> /etc/ecs/ecs.config
     sudo iptables --insert FORWARD 1 --in-interface docker+ --destination 169.254.169.254/32 --jump DROP
     sudo service iptables save
     echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config
   EOT
-  )
 
   lifecycle {
     create_before_destroy = true
@@ -619,16 +613,12 @@ resource "aws_launch_template" "ecs" {
 }
 
 resource "aws_autoscaling_group" "ecs" {
+  launch_configuration  = aws_launch_configuration.ecs.name
   min_size              = 1
   max_size              = 6
   desired_capacity      = 1
   protect_from_scale_in = true
   vpc_zone_identifier   = local.alb_subnets
-
-  launch_template {
-    id      = aws_launch_template.ecs.id
-    version = "$Latest"
-  }
 
   dynamic "tag" {
     for_each = merge(local.common_tags, {
