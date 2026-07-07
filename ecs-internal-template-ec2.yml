@@ -1,0 +1,1436 @@
+Resources:
+  taskexecutionroleisaiworkspacejupyterhubduseast1devFD3E270E:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+        - arn:aws:iam::128211541887:policy/amtrak/project-api-management-fullaccess
+        - arn:aws:iam::128211541887:policy/amtrak/project-integration-fullaccess
+        - arn:aws:iam::128211541887:policy/amtrak/project-containers-fullaccess
+        - arn:aws:iam::128211541887:policy/amtrak/project-dynamodb-fullaccess
+        - arn:aws:iam::128211541887:policy/amtrak/project-lambda-fullaccess
+        - arn:aws:iam::128211541887:policy/amtrak/project-management-fullaccess
+        - arn:aws:iam::128211541887:policy/amtrak/project-s3-fullaccess
+        - !Join
+          - ''
+          - - 'arn:'
+            - !Ref AWS::Partition
+            - ':iam::aws:policy/AWSXrayFullAccess'
+        - arn:aws:iam::128211541887:policy/amtrak/project-eks-fullaccess
+        - arn:aws:iam::128211541887:policy/amtrak/project-efs-fullaccess
+        - arn:aws:iam::128211541887:policy/amtrak/project-kafka-fullaccess
+      Path: /
+      RoleName: is-aiworkspace-jupyterhub-d-Task-Execution-Role
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: aws-cdk:id
+          Value: is-aiworkspace-jupyterhub-d-us-east-1-stack_c8b102f7598740b19e27e82747c00890bffd46dd3d
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/task_execution_roleis-aiworkspace-jupyterhub-dus-east-1dev/Resource
+      cdk_nag:
+        rules_to_suppress:
+          - reason: Managed Policies are required for this role
+            id: AwsSolutions-IAM5
+          - reason: Managed Policies are required for this role
+            id: AwsSolutions-IAM4
+  taskexecutionroleisaiworkspacejupyterhubduseast1devDefaultPolicy98D88A4E:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ecr:BatchCheckLayerAvailability
+              - ecr:BatchGetImage
+              - ecr:GetDownloadUrlForLayer
+            Effect: Allow
+            Resource: arn:aws:ecr:us-east-1:873043565046:repository/is-aiworkspace-jupyterhub
+          - Action: ecr:GetAuthorizationToken
+            Effect: Allow
+            Resource: '*'
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource: !GetAtt ecsisaiworkspacejupyterhubdLogGroup99DBD658.Arn
+          - Action:
+              - secretsmanager:DescribeSecret
+              - secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              - arn:aws:secretsmanager:us-east-1:128211541887:secret:/amtrak/project/io/entobsv/d/dynatrace/ecs-??????
+              - !Ref appSecret2477DFD5
+        Version: '2012-10-17'
+      PolicyName: taskexecutionroleisaiworkspacejupyterhubduseast1devDefaultPolicy98D88A4E
+      Roles:
+        - !Ref taskexecutionroleisaiworkspacejupyterhubduseast1devFD3E270E
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/task_execution_roleis-aiworkspace-jupyterhub-dus-east-1dev/DefaultPolicy/Resource
+  taskroleisaiworkspacejupyterhubdC694A91C:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+        - arn:aws:iam::128211541887:policy/amtrak/project-s3-fullaccess
+        - arn:aws:iam::128211541887:policy/amtrak/project-management-fullaccess
+        - arn:aws:iam::128211541887:policy/amtrak/project-containers-fullaccess
+        - !Join
+          - ''
+          - - 'arn:'
+            - !Ref AWS::Partition
+            - ':iam::aws:policy/AWSXRayDaemonWriteAccess'
+        - !Join
+          - ''
+          - - 'arn:'
+            - !Ref AWS::Partition
+            - ':iam::aws:policy/CloudWatchFullAccess'
+        - !Join
+          - ''
+          - - 'arn:'
+            - !Ref AWS::Partition
+            - ':iam::aws:policy/AWSAppMeshEnvoyAccess'
+        - !Join
+          - ''
+          - - 'arn:'
+            - !Ref AWS::Partition
+            - ':iam::aws:policy/CloudWatchAgentServerPolicy'
+        - arn:aws:iam::128211541887:policy/amtrak/project-dynamodb-fullaccess
+        - arn:aws:iam::128211541887:policy/amtrak/project-lambda-fullaccess
+        - arn:aws:iam::128211541887:policy/amtrak/project-efs-fullaccess
+      Path: /
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - ssmmessages:CreateControlChannel
+                  - ssmmessages:CreateDataChannel
+                  - ssmmessages:OpenControlChannel
+                  - ssmmessages:OpenDataChannel
+                Effect: Allow
+                Resource: '*'
+            Version: '2012-10-17'
+          PolicyName: AllowExecuteCommand
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:BatchGetImage
+                  - ecr:GetAuthorizationToken
+                  - ecr:GetDownloadUrlForLayer
+                  - guardduty:SendSecurityTelemetry
+                Effect: Allow
+                Resource: '*'
+                Sid: GuardDutytest
+              - Action:
+                  - s3:GetBucketLocation
+                  - s3:GetObject
+                  - s3:GetObjectVersion
+                  - s3:ListBucket
+                Effect: Allow
+                Resource:
+                  - arn:aws:s3:::is-ecoupon-d-128211541887-us-east-1*
+                  - arn:aws:s3:::is-ecoupon-d-128211541887-us-east-1/*
+                Sid: S3KobieReadAccess
+              - Action:
+                  - kms:Decrypt
+                  - kms:DescribeKey
+                Effect: Allow
+                Resource: arn:aws:kms:us-east-1:128211541887:key/40268282-b811-4a49-8d71-1708f736a086*
+                Sid: S3CustomKMSAccess
+            Version: '2012-10-17'
+          PolicyName: CDKCustom
+        - PolicyDocument:
+            Statement:
+              - Action: secretsmanager:GetSecretValue
+                Effect: Allow
+                Resource: '*'
+            Version: '2012-10-17'
+          PolicyName: AllowCWAccess
+      RoleName: is-aiworkspace-jupyterhub-d-Task-Role
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/task_roleis-aiworkspace-jupyterhub-d/Resource
+      cdk_nag:
+        rules_to_suppress:
+          - reason: Managed Policies are required for this role
+            id: AwsSolutions-IAM5
+          - reason: Managed Policies are required for this role
+            id: AwsSolutions-IAM4
+  taskroleisaiworkspacejupyterhubdDefaultPolicy8BD3C6EE:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:CreateLogStream
+              - logs:DescribeLogGroups
+              - logs:DescribeLogStreams
+              - logs:PutLogEvents
+              - ssmmessages:CreateControlChannel
+              - ssmmessages:CreateDataChannel
+              - ssmmessages:OpenControlChannel
+              - ssmmessages:OpenDataChannel
+            Effect: Allow
+            Resource: '*'
+        Version: '2012-10-17'
+      PolicyName: taskroleisaiworkspacejupyterhubdDefaultPolicy8BD3C6EE
+      Roles:
+        - !Ref taskroleisaiworkspacejupyterhubdC694A91C
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/task_roleis-aiworkspace-jupyterhub-d/DefaultPolicy/Resource
+  isaiworkspacejupyterhubdALBBF96D663:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: SecurityGroup for is-aiworkspace-jupyterhub-d ALB
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: '-1'
+      SecurityGroupIngress:
+        - CidrIp: 10.0.0.0/8
+          Description: Open LB for incoming traffic
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+        - CidrIp: 10.0.0.0/8
+          Description: Open LB for incoming traffic
+          FromPort: 443
+          IpProtocol: tcp
+          ToPort: 443
+        - CidrIp: 172.16.0.0/12
+          Description: Open LB for VPN incoming traffic
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+        - CidrIp: 172.16.0.0/12
+          Description: Open LB for VPN incoming traffic
+          FromPort: 443
+          IpProtocol: tcp
+          ToPort: 443
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+      VpcId: vpc-0aa9799898d383e32
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dALB/Resource
+  LBisaiworkspacejupyterhubdADD239EE:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      LoadBalancerAttributes:
+        - Key: deletion_protection.enabled
+          Value: 'false'
+        - Key: routing.http2.enabled
+          Value: 'false'
+        - Key: idle_timeout.timeout_seconds
+          Value: '1000'
+        - Key: routing.http.drop_invalid_header_fields.enabled
+          Value: 'true'
+        - Key: routing.http.desync_mitigation_mode
+          Value: strictest
+      Name: is-aiworkspace-jupyterhub-d-alb
+      Scheme: internal
+      SecurityGroups:
+        - !GetAtt isaiworkspacejupyterhubdALBBF96D663.GroupId
+      Subnets:
+        - subnet-041b16402eac0dce8
+        - subnet-0ca4bafe5f2cb36be
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+      Type: application
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/LBis-aiworkspace-jupyterhub-d/Resource
+      cdk_nag:
+        rules_to_suppress:
+          - reason: Access logging enabled per landscape, and per application. No configured standardization
+            id: AwsSolutions-ELB2
+  LBisaiworkspacejupyterhubdisaiworkspacejupyterhubdGreenALBListenerE2F9800A:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      Certificates:
+        - CertificateArn: arn:aws:acm:us-east-1:128211541887:certificate/2bee7b9c-c499-4f54-a8c7-42d8ad0a4cdd
+      DefaultActions:
+        - ForwardConfig:
+            TargetGroupStickinessConfig:
+              DurationSeconds: 604800
+              Enabled: true
+            TargetGroups:
+              - TargetGroupArn: !Ref GreenALBTargetGroupisaiworkspacejupyterhubdA8222390
+                Weight: 1
+          Type: forward
+      LoadBalancerArn: !Ref LBisaiworkspacejupyterhubdADD239EE
+      Port: 443
+      Protocol: HTTPS
+      SslPolicy: ELBSecurityPolicy-TLS13-1-2-Res-2021-06
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/LBis-aiworkspace-jupyterhub-d/is-aiworkspace-jupyterhub-d_Green_ALBListener/Resource
+  LBisaiworkspacejupyterhubdPublicListener07E11EFD:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      Certificates:
+        - CertificateArn: arn:aws:acm:us-east-1:128211541887:certificate/2bee7b9c-c499-4f54-a8c7-42d8ad0a4cdd
+      DefaultActions:
+        - TargetGroupArn: !Ref LBisaiworkspacejupyterhubdPublicListenerECSGroupBFE111E7
+          Type: forward
+      LoadBalancerArn: !Ref LBisaiworkspacejupyterhubdADD239EE
+      Port: 80
+      Protocol: HTTPS
+      SslPolicy: ELBSecurityPolicy-TLS13-1-2-Res-2021-06
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/LBis-aiworkspace-jupyterhub-d/PublicListener/Resource
+  LBisaiworkspacejupyterhubdPublicListenerECSGroupBFE111E7:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /hub
+      HealthCheckPort: traffic-port
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 5
+      Matcher:
+        HttpCode: 200-302
+      Port: 8000
+      Protocol: HTTP
+      ProtocolVersion: HTTP1
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+      TargetGroupAttributes:
+        - Key: stickiness.enabled
+          Value: 'true'
+        - Key: stickiness.type
+          Value: lb_cookie
+        - Key: stickiness.lb_cookie.duration_seconds
+          Value: '604800'
+      TargetType: instance
+      UnhealthyThresholdCount: 2
+      VpcId: vpc-0aa9799898d383e32
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/LBis-aiworkspace-jupyterhub-d/PublicListener/ECSGroup/Resource
+  isaiworkspacejupyterhubdlbArnParam4BDAFE35:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Description: LB ARN for is-aiworkspace-jupyterhub-d in d
+      Name: /amtrak/is/aiworkspace/jupyterhub/lb-arn
+      Tags:
+        ApplicationGroup: PrivateAI
+        BackupTier: DEV
+        Department: is
+        ITDR: '424844'
+        Landscape: DEV
+        Project: aiworkspace
+      Type: String
+      Value: !Ref LBisaiworkspacejupyterhubdADD239EE
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dlbArnParam/Resource
+  isaiworkspacejupyterhubdlbDnsParamAF22B47A:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Description: LB DNS Name for is-aiworkspace-jupyterhub-d in d
+      Name: /amtrak/is/aiworkspace/jupyterhub/lb-dns-name
+      Tags:
+        ApplicationGroup: PrivateAI
+        BackupTier: DEV
+        Department: is
+        ITDR: '424844'
+        Landscape: DEV
+        Project: aiworkspace
+      Type: String
+      Value: !GetAtt LBisaiworkspacejupyterhubdADD239EE.DNSName
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dlbDnsParam/Resource
+  Ec2isaiworkspacejupyterhubdCPCluster48C77B4B:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: is-aiworkspace-jupyterhub-d-cluster
+      ClusterSettings:
+        - Name: containerInsights
+          Value: enabled
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/Ec2is-aiworkspace-jupyterhub-dCPCluster/Resource
+  Ec2isaiworkspacejupyterhubdCPClusterD7A728D4:
+    Type: AWS::ECS::ClusterCapacityProviderAssociations
+    Properties:
+      CapacityProviders:
+        - !Ref isaiworkspacejupyterhubdCapacityProvider5DD1B2D2
+      Cluster: !Ref Ec2isaiworkspacejupyterhubdCPCluster48C77B4B
+      DefaultCapacityProviderStrategy: []
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/Ec2is-aiworkspace-jupyterhub-dCPCluster/Ec2is-aiworkspace-jupyterhub-dCPCluster
+  isaiworkspacejupyterhubdAutoScalingEC2SecurityGroupA5056586:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for ECS EC2 instances
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: '-1'
+      SecurityGroupIngress:
+        - Description: !Join
+            - ''
+            - - 'from '
+              - !GetAtt isaiworkspacejupyterhubdALBBF96D663.GroupId
+              - ':ALL TRAFFIC'
+          IpProtocol: '-1'
+          SourceSecurityGroupId: !GetAtt isaiworkspacejupyterhubdALBBF96D663.GroupId
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+      VpcId: vpc-0aa9799898d383e32
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dAutoScalingEC2SecurityGroup/Resource
+  isaiworkspacejupyterhubdAutoScalingGroupInstanceRole328BF31F:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+        - !Join
+          - ''
+          - - 'arn:'
+            - !Ref AWS::Partition
+            - ':iam::aws:policy/AmazonSSMManagedInstanceCore'
+        - !Join
+          - ''
+          - - 'arn:'
+            - !Ref AWS::Partition
+            - ':iam::aws:policy/CloudWatchAgentServerPolicy'
+        - arn:aws:iam::128211541887:policy/amtrak/project-efs-fullaccess
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Name
+          Value: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dAutoScalingGroup
+        - Key: Project
+          Value: aiworkspace
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dAutoScalingGroup/InstanceRole/Resource
+  isaiworkspacejupyterhubdAutoScalingGroupInstanceRoleDefaultPolicyB8578095:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ecs:DeregisterContainerInstance
+              - ecs:RegisterContainerInstance
+              - ecs:Submit*
+            Effect: Allow
+            Resource: !GetAtt Ec2isaiworkspacejupyterhubdCPCluster48C77B4B.Arn
+          - Action:
+              - ecs:Poll
+              - ecs:StartTelemetrySession
+            Condition:
+              ArnEquals:
+                ecs:cluster: !GetAtt Ec2isaiworkspacejupyterhubdCPCluster48C77B4B.Arn
+            Effect: Allow
+            Resource: '*'
+          - Action:
+              - ecr:GetAuthorizationToken
+              - ecs:DiscoverPollEndpoint
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource: '*'
+        Version: '2012-10-17'
+      PolicyName: isaiworkspacejupyterhubdAutoScalingGroupInstanceRoleDefaultPolicyB8578095
+      Roles:
+        - !Ref isaiworkspacejupyterhubdAutoScalingGroupInstanceRole328BF31F
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dAutoScalingGroup/InstanceRole/DefaultPolicy/Resource
+  isaiworkspacejupyterhubdAutoScalingGroupInstanceProfile9DF2E7AE:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref isaiworkspacejupyterhubdAutoScalingGroupInstanceRole328BF31F
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dAutoScalingGroup/InstanceProfile
+  isaiworkspacejupyterhubdAutoScalingGroupLaunchConfig5BB0C7EE:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      IamInstanceProfile: !Ref isaiworkspacejupyterhubdAutoScalingGroupInstanceProfile9DF2E7AE
+      ImageId: !Ref SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter
+      InstanceType: m6a.8xlarge
+      MetadataOptions:
+        HttpTokens: required
+      SecurityGroups:
+        - !GetAtt isaiworkspacejupyterhubdAutoScalingEC2SecurityGroupA5056586.GroupId
+      UserData: !Base64
+        Fn::Join:
+          - ''
+          - - |-
+              #!/bin/bash
+              echo ECS_CLUSTER=
+            - !Ref Ec2isaiworkspacejupyterhubdCPCluster48C77B4B
+            - |2-
+               >> /etc/ecs/ecs.config
+              sudo iptables --insert FORWARD 1 --in-interface docker+ --destination 169.254.169.254/32 --jump DROP
+              sudo service iptables save
+              echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config
+    DependsOn:
+      - isaiworkspacejupyterhubdAutoScalingGroupInstanceRoleDefaultPolicyB8578095
+      - isaiworkspacejupyterhubdAutoScalingGroupInstanceRole328BF31F
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dAutoScalingGroup/LaunchConfig
+  isaiworkspacejupyterhubdAutoScalingGroupASGE2E9E5BC:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      DesiredCapacity: '1'
+      LaunchConfigurationName: !Ref isaiworkspacejupyterhubdAutoScalingGroupLaunchConfig5BB0C7EE
+      MaxSize: '6'
+      MinSize: '1'
+      NewInstancesProtectedFromScaleIn: true
+      Tags:
+        - Key: ApplicationGroup
+          PropagateAtLaunch: true
+          Value: PrivateAI
+        - Key: BackupTier
+          PropagateAtLaunch: true
+          Value: DEV
+        - Key: Department
+          PropagateAtLaunch: true
+          Value: is
+        - Key: ITDR
+          PropagateAtLaunch: true
+          Value: '424844'
+        - Key: Landscape
+          PropagateAtLaunch: true
+          Value: DEV
+        - Key: Name
+          PropagateAtLaunch: true
+          Value: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dAutoScalingGroup
+        - Key: Project
+          PropagateAtLaunch: true
+          Value: aiworkspace
+      VPCZoneIdentifier:
+        - subnet-041b16402eac0dce8
+        - subnet-0ca4bafe5f2cb36be
+    UpdatePolicy:
+      AutoScalingScheduledAction:
+        IgnoreUnmodifiedGroupSizeProperties: true
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dAutoScalingGroup/ASG
+  isaiworkspacejupyterhubdCapacityProvider5DD1B2D2:
+    Type: AWS::ECS::CapacityProvider
+    Properties:
+      AutoScalingGroupProvider:
+        AutoScalingGroupArn: !Ref isaiworkspacejupyterhubdAutoScalingGroupASGE2E9E5BC
+        ManagedScaling:
+          Status: ENABLED
+          TargetCapacity: 100
+        ManagedTerminationProtection: ENABLED
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dCapacityProvider/is-aiworkspace-jupyterhub-dCapacityProvider
+  appSecret2477DFD5:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: /amtrak/project/is/aiworkspace/jupyterhub/d/app
+      SecretString: '{"DOMAIN":"Set Me","AAD_TENANT_ID":"Set Me","AAD_APP_CLIENT_ID":"Set Me","AAD_APP_CLIENT_SECRET":"Set Me"}'
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/app-Secret/Resource
+  isaiworkspacejupyterhubdTaskDefinition2A7E661C1:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Command:
+            - |
+              METADATA=$(curl -s "${ECS_CONTAINER_METADATA_URI_V4}/task")
+
+              SERVICE_NAME=$(echo "$METADATA" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('ServiceName', d['Family']))")
+              TASK_ID=$(echo "$METADATA" | python3 -c "import sys,json; print(json.load(sys.stdin)['TaskARN'].split('/')[-1][:8])")
+
+              export DT_HOST_ID="${SERVICE_NAME}-${TASK_ID}"
+              echo "DT_HOST_ID=$DT_HOST_ID"
+
+              exec /srv/jupyterhub/run.sh
+          EntryPoint:
+            - /bin/sh
+            - '-c'
+          Environment:
+            - Name: USER_GROUP
+              Value: admin
+            - Name: OAUTH_CALLBACK_URL
+              Value: https://jupyter-dev.amtrak.ad.nrpc/hub/oauth_callback
+            - Name: JUPYTERHUB_CRYPT_KEY
+              Value: 6ef9cf93112abaae673b2b49dd9a2d11b0959b5431f186af19b836ee6b434851
+            - Name: DT_TENANT
+              Value: yef22672
+            - Name: DT_NETWORK_ZONE
+              Value: aws.us-east-1.oneagent.dev
+            - Name: DT_CONNECTION_POINT
+              Value: https://dynagagent31d.amtrak.ad.nrpc:9999/communication;https://10.224.12.153:9999/communication;https://yef22672.live.dynatrace.com:443
+            - Name: DT_TAGS
+              Value: dynatrace=true servicemap=A3I application=A3I-JUPYTERHUB environment=DEV cluster=is-aiworkspace-jupyterhub-d-cluster aws_region=us-east-1
+            - Name: DT_API_URL
+              Value: https://yef22672.live.dynatrace.com/api
+            - Name: DT_TENANT_URL
+              Value: https://yef22672.live.dynatrace.com
+          Essential: true
+          Image: !Join
+            - ''
+            - - 873043565046.dkr.ecr.us-east-1.
+              - !Ref AWS::URLSuffix
+              - /is-aiworkspace-jupyterhub:8b6deba6b5f
+          LinuxParameters:
+            Capabilities: {}
+            InitProcessEnabled: true
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref ecsisaiworkspacejupyterhubdLogGroup99DBD658
+              awslogs-stream-prefix: us-east-1
+              awslogs-region: us-east-1
+              mode: non-blocking
+          Memory: 122880
+          MountPoints:
+            - ContainerPath: /notebooks
+              ReadOnly: false
+              SourceVolume: EFSMount
+          Name: is-aiworkspace-jupyterhub-d
+          PortMappings:
+            - ContainerPort: 8000
+              HostPort: 0
+              Protocol: tcp
+          Privileged: false
+          Secrets:
+            - Name: DOMAIN
+              ValueFrom: !Join
+                - ''
+                - - !Ref appSecret2477DFD5
+                  - ':DOMAIN::'
+            - Name: AAD_TENANT_ID
+              ValueFrom: !Join
+                - ''
+                - - !Ref appSecret2477DFD5
+                  - ':AAD_TENANT_ID::'
+            - Name: AAD_APP_CLIENT_ID
+              ValueFrom: !Join
+                - ''
+                - - !Ref appSecret2477DFD5
+                  - ':AAD_APP_CLIENT_ID::'
+            - Name: AAD_APP_CLIENT_SECRET
+              ValueFrom: !Join
+                - ''
+                - - !Ref appSecret2477DFD5
+                  - ':AAD_APP_CLIENT_SECRET::'
+            - Name: DT_TENANTTOKEN
+              ValueFrom: 'arn:aws:secretsmanager:us-east-1:128211541887:secret:/amtrak/project/io/entobsv/d/dynatrace/ecs:DT_TENANTTOKEN::'
+      ExecutionRoleArn: !GetAtt taskexecutionroleisaiworkspacejupyterhubduseast1devFD3E270E.Arn
+      Family: is-aiworkspace-jupyterhub-d-TaskDefinition
+      NetworkMode: bridge
+      RequiresCompatibilities:
+        - EC2
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+      TaskRoleArn: !GetAtt taskroleisaiworkspacejupyterhubdC694A91C.Arn
+      Volumes:
+        - EFSVolumeConfiguration:
+            FilesystemId: !Ref EFSFS36873366
+            RootDirectory: /
+            TransitEncryption: ENABLED
+          Name: EFSMount
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-d-TaskDefinition2/Resource
+      cdk_nag:
+        rules_to_suppress:
+          - reason: Secrets are used for sensitive information but some landscape details are used via env variables.
+            id: AwsSolutions-ECS2
+  ecsisaiworkspacejupyterhubdLogGroup99DBD658:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: ecs/is-aiworkspace-jupyterhub-d
+      RetentionInDays: 30
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/ecs--is-aiworkspace-jupyterhub-d-LogGroup/Resource
+  isaiworkspacejupyterhubdServiceF5A04C57:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: SecurityGroup for is-aiworkspace-jupyterhub-d Service
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+      VpcId: vpc-0aa9799898d383e32
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dService/Resource
+  isaiworkspacejupyterhubdServiceto00000ALLTRAFFIC57AA32C8:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      CidrIp: 0.0.0.0/0
+      Description: Allow all outbound traffic by default
+      GroupId: !GetAtt isaiworkspacejupyterhubdServiceF5A04C57.GroupId
+      IpProtocol: '-1'
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dService/to 0.0.0.0_0:ALL TRAFFIC
+  isaiworkspacejupyterhubdServicefromisaiworkspacejupyterhubecspipelinedevisaiworkspacejupyterhubduseast1stackisaiworkspacejupyterhubdALB728C721B327686553558BAB14B:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Load balancer to target
+      FromPort: 32768
+      GroupId: !GetAtt isaiworkspacejupyterhubdServiceF5A04C57.GroupId
+      IpProtocol: tcp
+      SourceSecurityGroupId: !GetAtt isaiworkspacejupyterhubdALBBF96D663.GroupId
+      ToPort: 65535
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dService/from isaiworkspacejupyterhubecspipelinedevisaiworkspacejupyterhubduseast1stackisaiworkspacejupyterhubdALB728C721B:32768-65535
+  isaiworkspacejupyterhubdServicefromIndirectPeer80000C176BBB:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: !Join
+        - ''
+        - - 'from '
+          - !GetAtt isaiworkspacejupyterhubdALBBF96D663.GroupId
+          - ':8000'
+      FromPort: 8000
+      GroupId: !GetAtt isaiworkspacejupyterhubdServiceF5A04C57.GroupId
+      IpProtocol: tcp
+      SourceSecurityGroupId: !GetAtt isaiworkspacejupyterhubdALBBF96D663.GroupId
+      ToPort: 8000
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dService/from {IndirectPeer}:8000
+  isaiworkspacejupyterhubdServicefromIndirectPeer28000784035E8:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: !Join
+        - ''
+        - - 'from '
+          - !GetAtt isaiworkspacejupyterhubdALBBF96D663.GroupId
+          - ':8000'
+      FromPort: 8000
+      GroupId: !GetAtt isaiworkspacejupyterhubdServiceF5A04C57.GroupId
+      IpProtocol: tcp
+      SourceSecurityGroupId: !GetAtt isaiworkspacejupyterhubdALBBF96D663.GroupId
+      ToPort: 8000
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dService/from '{IndirectPeer2}':8000
+  GreenALBTargetGroupisaiworkspacejupyterhubdA8222390:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /hub
+      HealthCheckPort: traffic-port
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 5
+      Matcher:
+        HttpCode: 200-302
+      Port: 8000
+      Protocol: HTTP
+      ProtocolVersion: HTTP1
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+      TargetGroupAttributes:
+        - Key: stickiness.enabled
+          Value: 'true'
+        - Key: stickiness.type
+          Value: lb_cookie
+        - Key: stickiness.lb_cookie.duration_seconds
+          Value: '604800'
+      TargetType: instance
+      UnhealthyThresholdCount: 2
+      VpcId: vpc-0aa9799898d383e32
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/GreenALBTargetGroupis-aiworkspace-jupyterhub-d/Resource
+  isaiworkspacejupyterhubdServiceFA7DF4C6:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster: !Ref Ec2isaiworkspacejupyterhubdCPCluster48C77B4B
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      DeploymentController:
+        Type: CODE_DEPLOY
+      EnableECSManagedTags: true
+      EnableExecuteCommand: true
+      HealthCheckGracePeriodSeconds: 60
+      LaunchType: EC2
+      LoadBalancers:
+        - ContainerName: is-aiworkspace-jupyterhub-d
+          ContainerPort: 8000
+          TargetGroupArn: !Ref LBisaiworkspacejupyterhubdPublicListenerECSGroupBFE111E7
+      PropagateTags: SERVICE
+      SchedulingStrategy: REPLICA
+      ServiceName: is-aiworkspace-jupyterhub-d
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+      TaskDefinition: is-aiworkspace-jupyterhub-d-TaskDefinition
+    DependsOn:
+      - isaiworkspacejupyterhubdTaskDefinition2A7E661C1
+      - LBisaiworkspacejupyterhubdPublicListenerECSGroupBFE111E7
+      - LBisaiworkspacejupyterhubdPublicListener07E11EFD
+      - taskroleisaiworkspacejupyterhubdDefaultPolicy8BD3C6EE
+      - taskroleisaiworkspacejupyterhubdC694A91C
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-d/Service/Service
+  isaiworkspacejupyterhubdServiceTaskCountTarget97EE67BE:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MaxCapacity: 6
+      MinCapacity: 1
+      ResourceId: !Join
+        - ''
+        - - service/
+          - !Ref Ec2isaiworkspacejupyterhubdCPCluster48C77B4B
+          - /
+          - !GetAtt isaiworkspacejupyterhubdServiceFA7DF4C6.Name
+      RoleARN: arn:aws:iam::128211541887:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+    DependsOn:
+      - isaiworkspacejupyterhubdTaskDefinition2A7E661C1
+      - taskroleisaiworkspacejupyterhubdDefaultPolicy8BD3C6EE
+      - taskroleisaiworkspacejupyterhubdC694A91C
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-d/Service/TaskCount/Target/Resource
+  isaiworkspacejupyterhubdServiceTaskCountTargetCpuScalingE3E9055D:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: isaiworkspacejupyterhubecspipelinedevisaiworkspacejupyterhubduseast1stackisaiworkspacejupyterhubdServiceTaskCountTargetCpuScalingAC2A8A91
+      PolicyType: TargetTrackingScaling
+      ScalingTargetId: !Ref isaiworkspacejupyterhubdServiceTaskCountTarget97EE67BE
+      TargetTrackingScalingPolicyConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ECSServiceAverageCPUUtilization
+        TargetValue: 60
+    DependsOn:
+      - isaiworkspacejupyterhubdTaskDefinition2A7E661C1
+      - taskroleisaiworkspacejupyterhubdDefaultPolicy8BD3C6EE
+      - taskroleisaiworkspacejupyterhubdC694A91C
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-d/Service/TaskCount/Target/CpuScaling/Resource
+  isaiworkspacejupyterhubdServiceTaskCountTargetMemoryScaling51AFC964:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: isaiworkspacejupyterhubecspipelinedevisaiworkspacejupyterhubduseast1stackisaiworkspacejupyterhubdServiceTaskCountTargetMemoryScaling1BD26D3C
+      PolicyType: TargetTrackingScaling
+      ScalingTargetId: !Ref isaiworkspacejupyterhubdServiceTaskCountTarget97EE67BE
+      TargetTrackingScalingPolicyConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ECSServiceAverageMemoryUtilization
+        TargetValue: 60
+    DependsOn:
+      - isaiworkspacejupyterhubdTaskDefinition2A7E661C1
+      - taskroleisaiworkspacejupyterhubdDefaultPolicy8BD3C6EE
+      - taskroleisaiworkspacejupyterhubdC694A91C
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-d/Service/TaskCount/Target/MemoryScaling/Resource
+  ServiceEFSSGC4679DAA:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: EFS SecurityGroup
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+      VpcId: vpc-0aa9799898d383e32
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/ServiceEFSSG/Resource
+  ServiceEFSSGto00000ALLTRAFFIC9DDF6948:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      CidrIp: 0.0.0.0/0
+      Description: Allow all outbound traffic by default
+      GroupId: !GetAtt ServiceEFSSGC4679DAA.GroupId
+      IpProtocol: '-1'
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/ServiceEFSSG/to 0.0.0.0_0:ALL TRAFFIC
+  ServiceEFSSGfromisaiworkspacejupyterhubecspipelinedevisaiworkspacejupyterhubduseast1stackisaiworkspacejupyterhubdService6539FED920499A683FE8:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: from isaiworkspacejupyterhubecspipelinedevisaiworkspacejupyterhubduseast1stackisaiworkspacejupyterhubdService6539FED9:2049
+      FromPort: 2049
+      GroupId: !GetAtt ServiceEFSSGC4679DAA.GroupId
+      IpProtocol: tcp
+      SourceSecurityGroupId: !GetAtt isaiworkspacejupyterhubdServiceF5A04C57.GroupId
+      ToPort: 2049
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/ServiceEFSSG/from isaiworkspacejupyterhubecspipelinedevisaiworkspacejupyterhubduseast1stackisaiworkspacejupyterhubdService6539FED9:2049
+  ServiceEFSSGfromisaiworkspacejupyterhubecspipelinedevisaiworkspacejupyterhubduseast1stackisaiworkspacejupyterhubdAutoScalingEC2SecurityGroup2F2DC0B32049FD4B4463:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: from isaiworkspacejupyterhubecspipelinedevisaiworkspacejupyterhubduseast1stackisaiworkspacejupyterhubdAutoScalingEC2SecurityGroup2F2DC0B3:2049
+      FromPort: 2049
+      GroupId: !GetAtt ServiceEFSSGC4679DAA.GroupId
+      IpProtocol: tcp
+      SourceSecurityGroupId: !GetAtt isaiworkspacejupyterhubdAutoScalingEC2SecurityGroupA5056586.GroupId
+      ToPort: 2049
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/ServiceEFSSG/from isaiworkspacejupyterhubecspipelinedevisaiworkspacejupyterhubduseast1stackisaiworkspacejupyterhubdAutoScalingEC2SecurityGroup2F2DC0B3:2049
+  EFSFS36873366:
+    Type: AWS::EFS::FileSystem
+    Properties:
+      Encrypted: true
+      FileSystemPolicy:
+        Statement:
+          - Action: '*'
+            Effect: Allow
+            Principal:
+              AWS: '*'
+            Resource: '*'
+        Version: '2012-10-17'
+      FileSystemTags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Name
+          Value: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/EFSFS
+        - Key: Project
+          Value: aiworkspace
+      PerformanceMode: generalPurpose
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/EFSFS/Resource
+  EFSFSEfsMountTarget1E5BE0BCF:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref EFSFS36873366
+      SecurityGroups:
+        - !GetAtt ServiceEFSSGC4679DAA.GroupId
+      SubnetId: subnet-041b16402eac0dce8
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/EFSFS/EfsMountTarget1
+  EFSFSEfsMountTarget21E76023F:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref EFSFS36873366
+      SecurityGroups:
+        - !GetAtt ServiceEFSSGC4679DAA.GroupId
+      SubnetId: subnet-095b95dae131c5050
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/EFSFS/EfsMountTarget2
+  EFSFSEfsMountTarget3F0F5BBE7:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref EFSFS36873366
+      SecurityGroups:
+        - !GetAtt ServiceEFSSGC4679DAA.GroupId
+      SubnetId: subnet-0597f2c1ab2fc49e9
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/EFSFS/EfsMountTarget3
+  isaiworkspacejupyterhubdCodeDeployApplication52FABC39:
+    Type: AWS::CodeDeploy::Application
+    Properties:
+      ApplicationName: is-aiworkspace-jupyterhub-d-Application
+      ComputePlatform: ECS
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dCodeDeployApplication/Resource
+  CodeDeployExecRoleisaiworkspacejupyterhubd5330DB23:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: codedeploy.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+        - !Join
+          - ''
+          - - 'arn:'
+            - !Ref AWS::Partition
+            - ':iam::aws:policy/AWSCodeBuildDeveloperAccess'
+        - !Join
+          - ''
+          - - 'arn:'
+            - !Ref AWS::Partition
+            - ':iam::aws:policy/AmazonEC2ContainerRegistryFullAccess'
+        - !Join
+          - ''
+          - - 'arn:'
+            - !Ref AWS::Partition
+            - ':iam::aws:policy/AmazonECS_FullAccess'
+        - !Join
+          - ''
+          - - 'arn:'
+            - !Ref AWS::Partition
+            - ':iam::aws:policy/CloudWatchLogsFullAccess'
+        - !Join
+          - ''
+          - - 'arn:'
+            - !Ref AWS::Partition
+            - ':iam::aws:policy/AWSCodeDeployRoleForECS'
+        - !Join
+          - ''
+          - - 'arn:'
+            - !Ref AWS::Partition
+            - ':iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+      Path: /
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/CodeDeployExecRoleis-aiworkspace-jupyterhub-d/Resource
+      cdk_nag:
+        rules_to_suppress:
+          - reason: Managed Policies are required for this role
+            id: AwsSolutions-IAM5
+          - reason: Managed Policies are required for this role
+            id: AwsSolutions-IAM4
+  isaiworkspacejupyterhubdBlueGreenDGAB3730E3:
+    Type: AWS::CodeDeploy::DeploymentGroup
+    Properties:
+      ApplicationName: !Ref isaiworkspacejupyterhubdCodeDeployApplication52FABC39
+      AutoRollbackConfiguration:
+        Enabled: true
+        Events:
+          - DEPLOYMENT_FAILURE
+      BlueGreenDeploymentConfiguration:
+        DeploymentReadyOption:
+          ActionOnTimeout: CONTINUE_DEPLOYMENT
+          WaitTimeInMinutes: 0
+        TerminateBlueInstancesOnDeploymentSuccess:
+          Action: TERMINATE
+          TerminationWaitTimeInMinutes: 0
+      DeploymentConfigName: CodeDeployDefault.ECSAllAtOnce
+      DeploymentGroupName: is-aiworkspace-jupyterhub-d-DeployGroup
+      DeploymentStyle:
+        DeploymentOption: WITH_TRAFFIC_CONTROL
+        DeploymentType: BLUE_GREEN
+      ECSServices:
+        - ClusterName: !Ref Ec2isaiworkspacejupyterhubdCPCluster48C77B4B
+          ServiceName: !GetAtt isaiworkspacejupyterhubdServiceFA7DF4C6.Name
+      LoadBalancerInfo:
+        TargetGroupPairInfoList:
+          - ProdTrafficRoute:
+              ListenerArns:
+                - !Ref LBisaiworkspacejupyterhubdPublicListener07E11EFD
+            TargetGroups:
+              - Name: !GetAtt LBisaiworkspacejupyterhubdPublicListenerECSGroupBFE111E7.TargetGroupName
+              - Name: !GetAtt GreenALBTargetGroupisaiworkspacejupyterhubdA8222390.TargetGroupName
+            TestTrafficRoute:
+              ListenerArns:
+                - !Ref LBisaiworkspacejupyterhubdisaiworkspacejupyterhubdGreenALBListenerE2F9800A
+      ServiceRoleArn: !GetAtt CodeDeployExecRoleisaiworkspacejupyterhubd5330DB23.Arn
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-dBlueGreenDG/Resource
+  isaiworkspacejupyterhubdautoscalingnotifications40E5EC65:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: ECS Auto-scaling notifications for is-aiworkspace-jupyterhub-d
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+      TopicName: is-aiworkspace-jupyterhub-d-autoscaling-notifications
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-d-autoscaling-notifications/Resource
+  isaiworkspacejupyterhubdautoscalingnotificationsEmilioBarcelosamtrakcom3C0CCC0E:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Endpoint: Emilio.Barcelos@amtrak.com
+      Protocol: email
+      TopicArn: !Ref isaiworkspacejupyterhubdautoscalingnotifications40E5EC65
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-d-autoscaling-notifications/Emilio.Barcelos@amtrak.com/Resource
+  isaiworkspacejupyterhubdcpuhighalarmE43ABCBA:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Ref isaiworkspacejupyterhubdautoscalingnotifications40E5EC65
+      AlarmDescription: is-aiworkspace-jupyterhub-d CPU utilization is high - triggering scale out
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref Ec2isaiworkspacejupyterhubdCPCluster48C77B4B
+        - Name: ServiceName
+          Value: !GetAtt isaiworkspacejupyterhubdServiceFA7DF4C6.Name
+      EvaluationPeriods: 2
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Period: 300
+      Statistic: Average
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+      Threshold: 60
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-d-cpu-high-alarm/Resource
+  isaiworkspacejupyterhubdcpulowalarm035C7F62:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Ref isaiworkspacejupyterhubdautoscalingnotifications40E5EC65
+      AlarmDescription: is-aiworkspace-jupyterhub-d CPU utilization is low - triggering scale in
+      ComparisonOperator: LessThanThreshold
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref Ec2isaiworkspacejupyterhubdCPCluster48C77B4B
+        - Name: ServiceName
+          Value: !GetAtt isaiworkspacejupyterhubdServiceFA7DF4C6.Name
+      EvaluationPeriods: 3
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Period: 300
+      Statistic: Average
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+      Threshold: 40
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-d-cpu-low-alarm/Resource
+  isaiworkspacejupyterhubdmemoryhighalarm80AE9BD7:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Ref isaiworkspacejupyterhubdautoscalingnotifications40E5EC65
+      AlarmDescription: is-aiworkspace-jupyterhub-d Memory utilization is high - triggering scale out
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref Ec2isaiworkspacejupyterhubdCPCluster48C77B4B
+        - Name: ServiceName
+          Value: !GetAtt isaiworkspacejupyterhubdServiceFA7DF4C6.Name
+      EvaluationPeriods: 2
+      MetricName: MemoryUtilization
+      Namespace: AWS/ECS
+      Period: 300
+      Statistic: Average
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+      Threshold: 60
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-d-memory-high-alarm/Resource
+  isaiworkspacejupyterhubdmemorylowalarmD89350B9:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Ref isaiworkspacejupyterhubdautoscalingnotifications40E5EC65
+      AlarmDescription: is-aiworkspace-jupyterhub-d Memory utilization is low - triggering scale in
+      ComparisonOperator: LessThanThreshold
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref Ec2isaiworkspacejupyterhubdCPCluster48C77B4B
+        - Name: ServiceName
+          Value: !GetAtt isaiworkspacejupyterhubdServiceFA7DF4C6.Name
+      EvaluationPeriods: 3
+      MetricName: MemoryUtilization
+      Namespace: AWS/ECS
+      Period: 300
+      Statistic: Average
+      Tags:
+        - Key: ApplicationGroup
+          Value: PrivateAI
+        - Key: BackupTier
+          Value: DEV
+        - Key: Department
+          Value: is
+        - Key: ITDR
+          Value: '424844'
+        - Key: Landscape
+          Value: DEV
+        - Key: Project
+          Value: aiworkspace
+      Threshold: 40
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/is-aiworkspace-jupyterhub-d-memory-low-alarm/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Analytics: v2:deflate64:H4sIAAAAAAAA/31T227bMAz9lr6r2pJhH5Cm2VAgw4I47wVDMw4XWTJEqZ1h6N8Hy7nYabEn8RySRyRFzfV8NtdfH+BdHrE8PRre664IgCe1JXHRIyl4l9eOodbd1hlSy4PN58YZxraHN+vFSgCLtPHuwIaSIvR6S40TDs63TyCkCOe6Kwij59D+9C42feb/iVXlSeQD/WIznxQZkMBoHJR7MGCRbfU2192iaQwjBHZ27aB8yj7yvdAEj+NYAtlzzMUe+XfgKwrXMkcwKZG6n55nW23AQ01h0LmCfiCiu6WJcnZ9NJfQAHJoN969cUl+IeKQ892iFlLd+3PqPbfC+Q7k9EwHttynDrVOGWcDsCU/4tZs499rudLrFOTfGGkY/mAWCAb2hnrBpYs2JAUxOEEwbCvdLWJwxQCug1pDtHhcOnvgKnq41HQfmpQQegpSg4WKfF4VT+H89p5CUsZVoru1G4m7SzahvDYQAnkr+vPnL0dNwS1i0sGtw/558+VTZjh2HvDEtjp3cPsIEyIpOojufrChopVAdR8xRb/6KQ6aSaErqaTGuFZ3K5RRF3liI7hCec6BNdnbTt5RSYkV3e1cw5jXIBtF3At6bi6yY5wUGhfLdwh41N3CgM9FZiOlyUb34HcMTQxJbdpwdPbLNz2b6dn3hz/C/OijDVyT3g7nP+BwPSdwBAAA
+    Metadata:
+      aws:cdk:path: is-aiworkspace-jupyterhub-ecs-pipeline/dev/is-aiworkspace-jupyterhub-d-us-east-1-stack/CDKMetadata/Default
+Parameters:
+  SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id
+  BootstrapVersion:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /cdk-bootstrap/hnb659fds/version
+    Description: Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]
+Outputs:
+  isaiworkspacejupyterhubdLoadBalancerDNS8A58D67A:
+    Value: !GetAtt LBisaiworkspacejupyterhubdADD239EE.DNSName
+  isaiworkspacejupyterhubdServiceURL568BC0DA:
+    Value: !Join
+      - ''
+      - - https://
+        - !GetAtt LBisaiworkspacejupyterhubdADD239EE.DNSName
+Rules:
+  CheckBootstrapVersion:
+    Assertions:
+      - Assert: !Not
+          - !Contains
+            - - '1'
+              - '2'
+              - '3'
+              - '4'
+              - '5'
+            - !Ref BootstrapVersion
+        AssertDescription: CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.
